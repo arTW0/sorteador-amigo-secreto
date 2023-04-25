@@ -9,6 +9,7 @@ export const useAddParticipantes = () => {
   return (nomeParticipante: string) => {
     if (lista.includes(nomeParticipante)) {
       setErro('Participante já adicionado')
+      setTimeout(() => setErro(''), 3000)
       return
     }
     return setLista(listaAtual => [...listaAtual, nomeParticipante])
