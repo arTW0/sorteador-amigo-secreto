@@ -51,3 +51,27 @@ test('nomes duplicados não podem ser adicionados', () => {
   const errorMessage = screen.getByRole('alert')
   expect(errorMessage.textContent).toBe('Esse nome já foi adicionado!')
 })
+
+test('a mensagem de erro deve sumir após os timers', () => {
+  jest.useFakeTimers()
+  render(
+    <RecoilRoot>
+      <Form />
+    </RecoilRoot>
+  )
+  const input = screen.getByPlaceholderText('Insira os nomes dos participantes')
+  const botao = screen.getByRole('button')
+  fireEvent.change(input, {
+    target: {
+      value: 'Ana Catarina'
+    }
+  })
+  fireEvent.click(botao)
+  let errorMessage = screen.queryByRole('alert')
+  expect(errorMessage).toBeInTheDocument()
+
+  jest.runAllTimers()
+
+  errorMessage = screen.queryByRole('alert')
+  expect(errorMessage).toBeNull()
+})
