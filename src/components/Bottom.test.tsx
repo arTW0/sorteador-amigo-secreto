@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { RecoilRoot } from "recoil";
 import Bottom from "./Bottom";
 import { useListaDeParticipantes } from "./state/hooks/useListaDeParticipantes";
@@ -14,7 +14,7 @@ jest.mock('./state/hooks/useListaDeParticipantes', () => {
 const mockNavigate = jest.fn()
 jest.mock('react-router-dom', () => {
   return {
-    useNavigate: mockNavigate
+    useNavigate: () => mockNavigate
   }
 })
 
@@ -48,5 +48,8 @@ describe('quando existem pacientes suficientes', () => {
       <Bottom />
     </RecoilRoot>)
     const botao = screen.getByRole('button')
+    fireEvent.click(botao)
+    expect(mockNavigate).toHaveBeenCalledTimes(1)
+    expect(mockNavigate).toHaveBeenCalledWith('/sorteio')
   })
 })
